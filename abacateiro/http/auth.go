@@ -1,33 +1,21 @@
 package http
 
 import (
-	"application/auth"
-	"context"
 	"net/http"
-	"strings"
+
+	"github.com/go-chi/chi/v5"
 )
 
-func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			http.Error(w, "Authorization header is required", http.StatusUnauthorized)
-			return
-		}
+func (s *Server) RegisterAuthRoutes(router chi.Router) {
+	router.Post("/login", s.handleLogin)
+}
 
-		bearerToken := strings.Split(authHeader, " ")
-		if len(bearerToken) != 2 {
-			http.Error(w, "Invalid token format", http.StatusUnauthorized)
-			return
-		}
+func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) {
+	// Decode
 
-		claims, err := auth.ValidateToken(bearerToken[1])
-		if err != nil {
-			http.Error(w, "Invalid token", http.StatusUnauthorized)
-			return
-		}
+	// Login user
 
-		ctx := context.WithValue(r.Context(), "user_id", claims.UserID)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	}
+	// Generate token
+
+	// Send to Frontend
 }
