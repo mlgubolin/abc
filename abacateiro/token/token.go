@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var secretKey = []byte("r5g1er65g1er65g1e6r5g1er65g1e6r51ge6r51ge65rg1er651g65er1") // Secret key for signing the token
+var secretKey = []byte("NXQR3CE48oRtihAHH6whuicuY9fifYXONXQR3CE48oRtihAHH6whuicuY9fifYXONXQR3CE48oR") // Secret key for signing the token
 
 type TokenService struct{}
 
