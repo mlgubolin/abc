@@ -17,7 +17,7 @@ func NewAuthService(userService application.UserService) *AuthService {
 	}
 }
 
-func (s *AuthService) LoginUser(ctx context.Context, query *application.LoginUserQuery) (*application.AuthInfo, error) {
+func (s *AuthService) Login(ctx context.Context, query *application.LoginUserQuery) (*application.AuthInfo, error) {
 
 	user, err := s.userService.GetUserByEmail(query.Username)
 

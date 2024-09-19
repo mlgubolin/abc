@@ -3,6 +3,7 @@ package http
 import (
 	"application"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -13,43 +14,41 @@ import (
 func (s *Server) RegisterAuthRoutes(router chi.Router) {
 	router.Post("/login", s.handleLogin)
 }
-
 func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) {
-	// Decode
-	var loginUserQuery *application.LoginUserQuery
 
-	if err := json.NewDecoder(r.Body).Decode(loginUserQuery); err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(errorResponse{Error: "Invalid request payload"}) //Manda via http em vez de print
+	var loginUserQuery application.LoginUserQuery
+	var err error
+	if err = json.NewDecoder(r.Body).Decode(&loginUserQuery); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(errorResponse{Error: "Invalid request payload"})
 		return
 	}
+	fmt.Println("Erro Decode:", err)
 
-	// Login user
-	userInfo, err := s.authService.Login(r.Context(), loginUserQuery)
+	// login user
+	userInfo, err := s.authService.Login(r.Context(), &loginUserQuery)
+	fmt.Println("Erro auth:", err)
 	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(errorResponse{Error: err.Error()}) //Manda via http em vez de print
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(errorResponse{Error: err.Error()})
 		return
 	}
 
-	// Generate token
+	// generate token
 	token, err := s.tokenService.GenerateToken(userInfo)
-
+	fmt.Println("Erro token:", err)
 	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(errorResponse{Error: err.Error()}) //Manda via http em vez de print
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(errorResponse{Error: err.Error()})
 		return
-	}
-	// Send to Frontend
-
-	authInfo := map[string]interface{}{
-		"token":   token.Token,
-		"expiry":  token.Expiry,
-		"email":   userInfo.Email,
-		"auth_id": userInfo.AuthId,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(authInfo)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"token":   token.Token,
+		"expiry":  token.Expiry,
+		"email":   userInfo.Email,
+		"auth_id": userInfo.AuthId,
+	})
 }

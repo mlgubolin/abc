@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 )
 
 // Server estrutura principal do servidor HTTP
@@ -21,9 +22,26 @@ type Server struct {
 }
 
 // NewServer construtor que inicializa um novo servidor HTTP
-func NewServer(addr string, logger *log.Logger, userService application.UserService) *Server {
+func NewServer(
+	addr string,
+	logger *log.Logger,
+	userService application.UserService,
+	authService application.AuthService,
+	tokenService application.TokenService,
+) *Server {
+
 	// Criar o roteador chi
 	router := chi.NewRouter()
+
+	// Basic CORS settings
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:9000"}, // Or "*"
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	}))
 
 	// Adicionar middlewares do chi
 	router.Use(middleware.Logger)
@@ -37,8 +55,10 @@ func NewServer(addr string, logger *log.Logger, userService application.UserServ
 			ReadTimeout:  15 * time.Second,
 			WriteTimeout: 15 * time.Second,
 		},
-		logger:      logger,
-		userService: userService,
+		logger:       logger,
+		userService:  userService,
+		authService:  authService,
+		tokenService: tokenService,
 	}
 
 	// Adicionar rotas
@@ -50,6 +70,7 @@ func NewServer(addr string, logger *log.Logger, userService application.UserServ
 // registerRoutes adiciona as rotas ao roteador
 func (s *Server) registerRoutes(router *chi.Mux) {
 	s.RegisterUserRoutes(router)
+	s.RegisterAuthRoutes(router)
 }
 
 // Start inicia o servidor HTTP

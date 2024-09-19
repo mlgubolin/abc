@@ -36,44 +36,14 @@
 </template>
 
 <script setup>
+import { useUserStore } from "src/stores/userStore";
 import { ref } from "vue";
-import { useUserStore } from "src/stores/user-store";
-import { useRouter } from "vue-router";
-import { useQuasar } from "quasar";
-
-const userStore = useUserStore();
-const router = useRouter();
-const $q = useQuasar();
-
-const token = ref(userStore.token);
-
-const username = ref("");
-const password = ref("");
-
-const handleLogin = async () => {
-  try {
-    // Here you would typically call an API to validate credentials
-    // For this example, we'll just simulate a successful login
-    await userStore.login(token.value);
-    $q.notify({
-      color: "positive",
-      message: "Login successful",
-      icon: "check",
-    });
-    router.push("/users");
-  } catch (error) {
-    console.error("Login failed:", error);
-    $q.notify({
-      color: "negative",
-      message: "Login failed. Please try again.",
-      icon: "warning",
-    });
-  }
-};
 
 defineOptions({
   name: "IndexPage",
 });
+
+const token = ref(useUserStore().token);
 </script>
 
 <style scoped>
