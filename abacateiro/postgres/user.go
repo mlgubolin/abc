@@ -3,6 +3,7 @@ package postgres
 import (
 	"application"
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/jackc/pgx"
@@ -60,7 +61,7 @@ func (s *UserService) GetUserByEmail(email string) (application.User, error) {
 	err := s.db.QueryRow(context.Background(), query, email).Scan(&user.ID, &user.Name, &user.Email, &user.Document, &user.Password)
 
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if errors.Is(err, pgx.ErrNoRows) {
 			return application.User{}, fmt.Errorf("user not found: %w", err)
 		}
 		return application.User{}, fmt.Errorf("failed to get user: %w", err)

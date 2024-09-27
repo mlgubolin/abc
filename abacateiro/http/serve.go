@@ -28,6 +28,7 @@ func NewServer(
 	userService application.UserService,
 	authService application.AuthService,
 	tokenService application.TokenService,
+	workReport application.WorkReportService
 ) *Server {
 
 	// Criar o roteador chi
