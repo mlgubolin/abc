@@ -60,7 +60,7 @@ func main() {
 	workReportService := postgres.NewWorkReportService(dbPool)
 
 	server := initializeServer(logger, userService, authService, tokenService, workReportService)
-
+	
 	_, err := work_report.UnzipWorkReport("word.doc")
 	if err != nil {
 		return
