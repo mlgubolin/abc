@@ -23,6 +23,7 @@ type Metadata struct {
 	FirstPage    int `json:"first_page,omitempty"`
 	LastPage     int `json:"last_page,omitempty"`
 	TotalRecords int `json:"total_records,omitempty"`
+	TotalCount   int `json:"total_count,omitempty"`
 }
 
 // CalculateMetadata calcula as informações de Metadata com base nos parâmetros fornecidos.

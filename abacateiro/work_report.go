@@ -1,7 +1,6 @@
 package application
 
 import (
-	"context"
 	"regexp"
 	"strings"
 	"time"
@@ -154,16 +153,16 @@ type WorkReportUpdate struct {
 }
 
 type WorkReportService interface {
-	CreateWorkReport(ctx context.Context, wr *WorkReport) error
-	FindWorkReportByID(ctx context.Context, id int) (*WorkReport, error)
-	FindWorkReports(ctx context.Context, filter WorkReportFilter) ([]*WorkReport, Metadata, error)
-	UpdateWorkReport(ctx context.Context, id int, upd WorkReportUpdate) (*WorkReport, error)
-	DeleteWorkReport(ctx context.Context, id int) error
+	CreateWorkReport(wr *WorkReport) error
+	FindWorkReportByID(id int) (*WorkReport, error)
+	FindWorkReports(filter WorkReportFilter) ([]*WorkReport, Metadata, error)
+	UpdateWorkReport(id int, upd WorkReportUpdate) (*WorkReport, error)
+	DeleteWorkReport(id int) error
 
-	CreateWorkReportTopic(ctx context.Context, wr *WorkReportTopic) error
-	DeleteDuplicatesWorkReportTopics(ctx context.Context) error
-	FindWorkReportTopicByID(ctx context.Context, id int) (*WorkReportTopic, error)
-	FindWorkReportTopics(ctx context.Context, filter WorkReportTopicFilter) ([]*WorkReportTopic, Metadata, error)
+	CreateWorkReportTopic(wr *WorkReportTopic) error
+	DeleteDuplicatesWorkReportTopics() error
+	FindWorkReportTopicByID(id int) (*WorkReportTopic, error)
+	FindWorkReportTopics(filter WorkReportTopicFilter) ([]*WorkReportTopic, Metadata, error)
 
-	FindWorkReportTopicsAdvSearch(ctx context.Context, filter WRAdvSearchFilter) ([]*WRAdvSearchResult, Metadata, error)
+	FindWorkReportTopicsAdvSearch(filter WRAdvSearchFilter) ([]*WRAdvSearchResult, Metadata, error)
 }

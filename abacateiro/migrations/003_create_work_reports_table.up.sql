@@ -1,10 +1,14 @@
-CREATE TABLE IF NOT EXISTS work_reports (
-	work_report_id int8 GENERATED ALWAYS AS IDENTITY( INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1 NO CYCLE) NOT NULL,
-	unit_id int8 NULL,
-	work_report_docname text unique NOT NULL,
-	work_report_from date NOT NULL,
-	work_report_to date NOT NULL,
-	work_report_text text NOT NULL,
-	work_report_data bytea NULL,
-	CONSTRAINT work_reports_pkey PRIMARY KEY (work_report_id),
+CREATE TABLE IF NOT EXISTS work_reports
+(
+    id          BIGSERIAL PRIMARY KEY,
+    unit_id     int8        NULL,
+    data_from   date        NOT NULL,
+    data_to     date        NOT NULL,
+    report_name text UNIQUE NOT NULL,
+    content     text        NOT NULL,
+    file_data   bytea       NULL
 );
+
+CREATE INDEX ON work_reports (unit_id);
+-- CREATE INDEX ON work_reports (from, to)
+

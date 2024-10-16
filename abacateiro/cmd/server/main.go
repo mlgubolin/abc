@@ -5,7 +5,6 @@ import (
 	"application/http"
 	"application/postgres"
 	"application/token"
-	"application/work_report"
 	"context"
 	"fmt"
 	"log"
@@ -60,11 +59,11 @@ func main() {
 	workReportService := postgres.NewWorkReportService(dbPool)
 
 	server := initializeServer(logger, userService, authService, tokenService, workReportService)
-	
-	_, err := work_report.UnzipWorkReport("word.doc")
-	if err != nil {
-		return
-	}
+
+	// _, err := work_report.UnzipWorkReport("word.doc")
+	// if err != nil {
+	// 	return
+	// }
 	// Usar contexto para gerenciar o ciclo de vida do servidor
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
