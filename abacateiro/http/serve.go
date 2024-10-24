@@ -20,6 +20,7 @@ type Server struct {
 	authService       application.AuthService
 	tokenService      application.TokenService
 	workReportService application.WorkReportService
+	unitService       application.UnitService
 }
 
 // NewServer construtor que inicializa um novo servidor HTTP

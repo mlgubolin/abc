@@ -13,6 +13,11 @@ const routes = [
         component: () => import("pages/TablePage.vue"),
         meta: { requiresAuth: true }, // Exige autenticação
       },
+      {
+        path: "/work-report",
+        component: () => import("pages/WorkReportPage.vue"),
+        meta: { requiresAuth: false }, // Exige autenticação
+      },
     ],
   },
   {

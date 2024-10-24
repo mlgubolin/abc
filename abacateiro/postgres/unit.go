@@ -51,10 +51,7 @@ func (s *UnitService) FindUnitByID(ctx context.Context, id int) (*application.Un
 
 }
 
-func (s *UnitService) FindUnits(
-	ctx context.Context,
-	filter application.UnitFilter,
-) ([]*application.Unit, application.Metadata, error) {
+func (s *UnitService) FindUnits(ctx context.Context, filter application.UnitFilter) ([]*application.Unit, application.Metadata, error) {
 	query := `SELECT unit_id, unit_name, storage_path, prometheus_server_address FROM units_v2`
 	var conditions []string
 	var args []interface{}
